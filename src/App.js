@@ -14,15 +14,28 @@ class App extends Component {
   }
   render() {
     return (
-      <Paper style={ { margin: 100, padding: 50 } } zDepth={3}>
-        <form onSubmit={this.onSubmit}>
+      <Paper style={{ margin: 100, padding: 50 }} zDepth={3}>
+        {/*<form onSubmit={this.onSubmit}>
           <TextField fullWidth hintText="AddTodo" value={this.state.text} onChange={e => this.setState({text: e.target.value})} />
           <RaisedButton primary fullWidth label="Add" type="submit"/>
-        </form>
+        </form>*/}
         <List>
           {
-            this.props.todo.map((a, i) => (
-              <ListItem primaryText={a} rightIconButton={<IconButton iconClassName="material-icons" tooltip="Delete"  onClick={() => this.props.delete(i)}>D</IconButton>} key={i}></ListItem>
+            this.props.product.map((a, i) => (
+              <ListItem primaryText={a['product-name']} rightIconButton={<IconButton iconClassName="material-icons" tooltip="Delete" onClick={() => this.props.add(i)}>A</IconButton>} key={i}></ListItem>
+            ))
+          }
+        </List>
+        <List>
+          {
+            this.props.cartItems.map((a, i) => (
+              <ListItem primaryText={a['product-name'] + ' QTY : ' + a.qty} rightIconButton={
+                <span>
+                  <IconButton iconClassName="material-icons" tooltip="Plus A Product" onClick={() => this.props.addItem(i)}>+</IconButton>
+                  <IconButton iconClassName="material-icons" tooltip="Minus A Product" onClick={() => this.props.deleteItem(i)}>-</IconButton>
+                  <IconButton iconClassName="material-icons" tooltip="Delete" onClick={() => this.props.delete(i)}>D</IconButton>
+                </span>
+              } key={i}></ListItem>
             ))
           }
         </List>
@@ -31,17 +44,16 @@ class App extends Component {
   }
 }
 const mapStateToProps = (state) => ({
-  todo: state.todo
+  cartItems: state.cartItems,
+  product: state.product
 })
 
 
 const mapDispatchToProps = (dispatch) => ({
-  add: (payload) => {
-    dispatch(actions.add(payload))
-  },
-  delete: (payload) => {
-    dispatch(actions.delete(payload))
-  },
+  add: (payload) => {dispatch(actions.add(payload))},
+  addItem: (payload) => {dispatch(actions.addItem(payload))},
+  delete: (payload) => {dispatch(actions.delete(payload))},
+  deleteItem: (payload) => {dispatch(actions.deleteItem(payload))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App) 
